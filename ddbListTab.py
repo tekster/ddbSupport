@@ -8,8 +8,28 @@ import boto3
 client = boto3.client('dynamodb')
 
 response = client.list_tables(
-    ExclusiveStartTableName='string',
     Limit=100
 )
 
-print(response)
+tableCnt = 1
+NoBackup = []
+for key, val in response.items():
+    if key == 'TableNames':
+       for tname in val:
+           tnameLower = tname.lower()
+           if tnameLower.find('test') == -1:
+              if tnameLower.find('beta') == -1:
+                 if tnameLower.find('gamma') == -1:
+                    tableCnt += 1
+                    print("Prod: " + tname)
+                 else:
+                    NoBackup.append(tname)
+              else:
+                NoBackup.append(tname)
+           else:
+             NoBackup.append(tname)
+    else:
+       print("\n")
+print(str(tableCnt) + " tables")
+for NoBU in NoBackup:
+    print("Non-Prod:" + NoBU)

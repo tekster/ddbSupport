@@ -10,6 +10,7 @@ import datetime
 client = boto3.client('dynamodb')
 now = datetime.datetime.now()
 timeStamp = now.strftime("%Y%m%d%H%M")
+NoBackup = []
 
 def TableBackup():
     response = client.list_tables(
@@ -20,12 +21,24 @@ def TableBackup():
     for key, val in response.items():
         if key == 'TableNames':
            for tname in val:
-               if tname.lower() not in ('test', 'beta', 'gamma'):
-                  tableCnt += 1
-                  print("aws dynamodb create-backup --table-name " + tname + " --backup-name " + tname + "-" + timeStamp + "\n")
+               tnameLower = tname.lower()
+               if tnameLower.find('test') == -1:
+                  if tnameLower.find('beta') == -1:
+                     if tnameLower.find('gamma') == -1:
+                        tableCnt += 1
+                        print("aws dynamodb create-backup --table-name " + tname + " --backup-name " + tname + "-" + timeStamp)
+                     else:
+                      NoBackup.append(tname)
+                  else:
+                    NoBackup.append(tname)
+               else:
+                 NoBackup.append(tname)
         else:
            print("\n")
-    print(str(tableCnt) + " tables")
+    print("# " + str(tableCnt) + " tables")
+    
+    for NoBU in NoBackup:
+        print("# No Backup for Table:" + NoBU)
 
 def main():
     TableBackup()

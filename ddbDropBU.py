@@ -23,7 +23,7 @@ def TableDropBU():
                buCnt += 1
                for key2, val2 in tname.items():
                    if key2 == 'BackupArn':
-                      print("aws dynamodb delete-backup --backup-arn " + str(val2) + "\n")
+                      print("aws dynamodb delete-backup --backup-arn " + str(val2))
         else:
            print("\n")
     print(str(buCnt) + " backups")
