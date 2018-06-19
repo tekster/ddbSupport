@@ -8,9 +8,6 @@ import boto3
 
 client = boto3.client('dynamodb')
 
-
-
-
 def TableDropBU():
     response = client.list_backups(
     Limit=100
