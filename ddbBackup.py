@@ -2,8 +2,9 @@
 """ 20180613 rescamil   development module to backup current DDB tables
     Reference doc: https://boto3.readthedocs.io/en/latest/reference/services/dynamodb.html#DynamoDB.Client.list_backups
     script output provides a commandline prompt of all DDB tables for specified account
+    script updated to perform actual table backups, if name not like (beta/gamma/test)
 """
-__version__ = '0.0.1'
+__version__ = '0.1.1'
 import boto3
 import datetime
 
@@ -27,6 +28,10 @@ def TableBackup():
                      if tnameLower.find('gamma') == -1:
                         tableCnt += 1
                         print("aws dynamodb create-backup --table-name " + tname + " --backup-name " + tname + "-" + timeStamp)
+                        execback = client.create_backup(
+                            TableName=tname,
+                            BackupName=tname+"-"+timeStamp
+                            )
                      else:
                       NoBackup.append(tname)
                   else:
